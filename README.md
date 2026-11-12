@@ -32,6 +32,7 @@ aws s3api create-bucket --bucket $BUCKET --create-bucket-configuration LocationC
 aws s3api put-public-access-block --bucket $BUCKET --public-access-block-configuration BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
 aws s3api put-bucket-versioning --bucket $BUCKET --versioning-configuration Status=Enabled
 aws s3api put-bucket-encryption --bucket $BUCKET --server-side-encryption-configuration '{"Rules":[{"ApplyServerSideEncryptionByDefault":{"SSEAlgorithm":"AES256"},"BucketKeyEnabled":true}]}'
+aws s3api put-bucket-tagging --bucket $BUCKET --tagging 'TagSet=[{Key=Project,Value=cloud-programming},{Key=Purpose,Value=terraform-state}]'
 ```
 
 ### 2. Terraform initialisieren
@@ -79,6 +80,22 @@ gh variable set CLOUDFRONT_DISTRIBUTION_ID --body "$(terraform output -raw cloud
 ```
 
 Je AWS-Konto ist nur ein OIDC-Provider für GitHub erlaubt. Gibt es ihn schon, etwa aus einem anderen Projekt, in `terraform.tfvars` `create_github_oidc_provider = false` setzen. Terraform benutzt ihn dann mit, ohne ihn zu verwalten.
+
+### 5. Überwachung und Budget
+
+Terraform legt einen CloudWatch-Alarm auf die Fehlerrate (5xx) von CloudFront und ein monatliches Budget an. Beide melden sich per E-Mail an die Adresse aus `alert_email`.
+
+- Nach dem ersten `apply` schickt AWS eine Mail mit Bestätigungslink. Erst nach der Bestätigung werden Alarme zugestellt.
+- Das Budget zählt nur Kosten mit dem Tag `Project` dieses Projekts, damit andere Projekte im selben Konto nicht mitzählen. Dafür den Tag einmalig in der Konsole unter Billing and Cost Management → Cost allocation tags aktivieren. Der Tag erscheint dort erst, wenn er in den Abrechnungsdaten aufgetaucht ist, das dauert bis zu 24 Stunden. Die Aktivierung gilt ab ihrem Zeitpunkt. Bis dahin zählt das Budget nichts und warnt auch nicht.
+- Der Alarm löst aus, wenn in zwei von drei aufeinanderfolgenden 5-Minuten-Abschnitten mehr als 5 % der Anfragen mit einem Serverfehler enden. Einzelne Fehler bei wenig Verkehr lösen so keinen Fehlalarm aus.
+
+Den Alarm testen, ohne echte Fehler zu erzeugen:
+
+```bash
+aws cloudwatch set-alarm-state --region us-east-1 --alarm-name cloud-programming-cloudfront-5xx --state-value ALARM --state-reason "Test"
+```
+
+Kurz danach wertet CloudWatch die echten Daten neu aus, der Alarm kehrt zu OK zurück und es folgt eine zweite Mail als Entwarnung.
 
 ## Sicherheit
 
