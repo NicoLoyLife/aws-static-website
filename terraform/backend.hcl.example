@@ -1,0 +1,3 @@
+bucket = "cloud-programming-tfstate-<konto-id>"
+key    = "aws-static-website/terraform.tfstate"
+region = "eu-central-1"
