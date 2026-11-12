@@ -52,6 +52,26 @@ terraform plan
 terraform apply
 ```
 
+### 3. Webseite hochladen
+
+Terraform legt nur die Infrastruktur an. Die Dateien aus `site/` kommen per AWS CLI in den Bucket. Bucket-Name und Adresse gibt Terraform als Output aus.
+
+```bash
+aws s3 sync ../site/ s3://$(terraform output -raw site_bucket_name)/ --delete
+aws cloudfront create-invalidation --distribution-id $(terraform output -raw cloudfront_distribution_id) --paths "/*"
+terraform output website_url
+```
+
+## Sicherheit
+
+- Der Bucket ist privat. Nur die eigene CloudFront-Distribution darf über Origin Access Control lesen, Anfragen ohne HTTPS lehnt die Bucket-Policy ab.
+- CloudFront leitet HTTP auf HTTPS um und setzt Sicherheits-Header: HSTS, Content Security Policy, X-Frame-Options, X-Content-Type-Options, Referrer-Policy und Permissions-Policy.
+- Daten im Bucket sind verschlüsselt (SSE-S3) und versioniert. Alte Versionen werden nach 30 Tagen gelöscht.
+
+## Abbau
+
+Der Bucket ist versioniert und wird von Terraform nicht gelöscht, solange er Dateien enthält. Das schützt vor versehentlichem Datenverlust. Vor `terraform destroy` deshalb alle Versionen in der S3-Konsole über „Leeren“ entfernen.
+
 ## Lizenz
 
 MIT, siehe [LICENSE](LICENSE).
