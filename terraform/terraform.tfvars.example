@@ -1,1 +1,6 @@
-github_repository = "NicoLoyLife/aws-static-website"
+github_repository    = "NicoLoyLife/aws-static-website"
+github_owner_id      = 22124439
+github_repository_id = 1455614135
+
+# Auf false setzen, wenn im Konto schon ein OIDC-Provider für GitHub existiert.
+create_github_oidc_provider = true

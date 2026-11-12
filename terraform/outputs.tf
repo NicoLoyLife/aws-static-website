@@ -13,6 +13,11 @@ output "cloudfront_distribution_id" {
   value       = aws_cloudfront_distribution.site.id
 }
 
+output "github_deploy_role_arn" {
+  description = "Rolle, die der Workflow über OIDC annimmt."
+  value       = aws_iam_role.github_deploy.arn
+}
+
 output "website_url" {
   description = "Adresse, unter der die Webseite erreichbar ist."
   value       = "https://${aws_cloudfront_distribution.site.domain_name}"

@@ -29,3 +29,19 @@ variable "github_repository" {
     error_message = "Format besitzer/name, zum Beispiel NicoLoyLife/aws-static-website."
   }
 }
+
+variable "github_owner_id" {
+  description = "Numerische ID des GitHub-Kontos, ermitteln mit: gh api users/<besitzer> --jq .id"
+  type        = number
+}
+
+variable "github_repository_id" {
+  description = "Numerische ID des Repositorys, ermitteln mit: gh api repos/<besitzer>/<name> --jq .id"
+  type        = number
+}
+
+variable "create_github_oidc_provider" {
+  description = "false, wenn das Konto schon einen OIDC-Provider für GitHub hat. Je Konto ist nur einer erlaubt."
+  type        = bool
+  default     = true
+}
