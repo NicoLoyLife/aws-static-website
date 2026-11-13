@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "site" {
-  #checkov:skip=CKV_AWS_18:Zugriffsprotokolle kosten Speicher und Auswertung, die Seite ist öffentlich und ohne Nutzerdaten
+  #checkov:skip=CKV_AWS_18:Zugriffsprotokolle enthalten IP-Adressen und damit personenbezogene Daten, gelesen wird ohnehin nur über CloudFront
   #checkov:skip=CKV_AWS_144:S3 speichert ohnehin über mehrere Availability Zones, der Inhalt liegt zusätzlich in Git
   #checkov:skip=CKV_AWS_145:SSE-S3 genügt für öffentliche Inhalte, ein KMS-Schlüssel kostet und braucht Freigaben für CloudFront
   #checkov:skip=CKV2_AWS_62:Kein Folgeprozess reagiert auf neue Objekte

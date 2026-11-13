@@ -53,10 +53,10 @@ resource "aws_cloudfront_response_headers_policy" "security" {
 }
 
 resource "aws_cloudfront_distribution" "site" {
-  #checkov:skip=CKV_AWS_68:WAF kostet ab etwa 6 USD im Monat und sprengt das Budget, die Seite nimmt keine Eingaben an
+  #checkov:skip=CKV_AWS_68:WAF kostet ab etwa 6 USD im Monat, mehr als die Hälfte des Budgets, und die Seite nimmt keine Eingaben an
   #checkov:skip=CKV2_AWS_47:Folgt aus CKV_AWS_68, ohne WAF keine WAF-Regeln
-  #checkov:skip=CKV_AWS_86:Zugriffsprotokolle kosten Speicher und Auswertung, Fehlerraten überwacht der CloudWatch-Alarm
-  #checkov:skip=CKV2_AWS_42:Ohne eigene Domain im Proof of Concept gibt es kein eigenes Zertifikat
+  #checkov:skip=CKV_AWS_86:Zugriffsprotokolle enthalten IP-Adressen und damit personenbezogene Daten, Fehlerraten überwacht der CloudWatch-Alarm
+  #checkov:skip=CKV2_AWS_42:Ohne eigene Domain gibt es kein eigenes Zertifikat
   #checkov:skip=CKV_AWS_174:Mit dem Standardzertifikat lässt sich die TLS-Mindestversion nicht setzen, folgt aus CKV2_AWS_42
   #checkov:skip=CKV_AWS_310:Nur ein Ursprung, S3 ist regional hochverfügbar
   #checkov:skip=CKV_AWS_374:Kunden weltweit, eine Ländersperre wäre fachlich falsch
