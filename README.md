@@ -104,6 +104,7 @@ Kurz danach wertet CloudWatch die echten Daten neu aus, der Alarm kehrt zu OK zu
 - Daten im Bucket sind verschlüsselt (SSE-S3) und versioniert. Alte Versionen werden nach 30 Tagen gelöscht.
 - Die Deploy-Rolle kann nur der `main`-Branch dieses Repositorys annehmen. Sie darf nur Dateien im Bucket der Webseite schreiben und löschen und den Cache der eigenen Distribution leeren. Ihre Zugangsdaten gelten höchstens eine Stunde.
 - Die Actions im Workflow sind auf feste Commit-Hashes gepinnt.
+- Jeder Pull Request mit Änderungen an `terraform/` oder an den Workflows durchläuft `terraform fmt`, `terraform validate`, TFLint und Checkov. Prüfungen, die für diese Seite bewusst entfallen (etwa WAF, Zugriffsprotokolle, eigener KMS-Schlüssel, eigenes Zertifikat), sind direkt an der Ressource mit `#checkov:skip` und Begründung markiert. Die meisten entfallen wegen des Budgets oder weil es keine eigene Domain gibt.
 
 ## Abbau
 

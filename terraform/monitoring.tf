@@ -1,7 +1,9 @@
 # Das Topic liegt in us-east-1, weil ein Alarm nur an ein Topic in seiner
-# eigenen Region melden kann. Die Nachrichten enthalten keine vertraulichen
-# Daten, deshalb ohne eigenen KMS-Schlüssel.
+# eigenen Region melden kann. Ohne eigenen KMS-Schlüssel, weil CloudWatch
+# nicht an ein mit aws/sns verschlüsseltes Topic melden kann und ein eigener
+# Schlüssel Geld kostet. Die Nachrichten enthalten keine vertraulichen Daten.
 resource "aws_sns_topic" "alerts" {
+  #checkov:skip=CKV_AWS_26:CloudWatch kann nicht an ein mit aws/sns verschlüsseltes Topic melden, ein eigener Schlüssel kostet
   provider = aws.us_east_1
 
   name = "${var.project_name}-alerts"
