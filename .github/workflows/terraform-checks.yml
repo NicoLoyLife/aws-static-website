@@ -58,9 +58,7 @@ jobs:
           tflint --init --config "$GITHUB_WORKSPACE/.tflint.hcl"
           tflint --config "$GITHUB_WORKSPACE/.tflint.hcl" --format compact
 
+      # Feste Version über pipx, die Docker-Action bringt eine veraltete Checkov-Version mit.
       - name: Checkov ausführen
-        uses: bridgecrewio/checkov-action@99bb2caf247dfd9f03cf984373bc6043d4e32ebf # v12.1347.0
-        with:
-          directory: terraform
-          config_file: .checkov.yaml
-          quiet: true
+        working-directory: .
+        run: pipx run checkov==3.4.5 --config-file .checkov.yaml --directory . --quiet
