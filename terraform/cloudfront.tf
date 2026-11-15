@@ -36,9 +36,9 @@ resource "aws_cloudfront_response_headers_policy" "security" {
       override        = true
     }
 
-    # Die Seite lädt nur eigene Bilder und Stylesheets, Skripte gibt es nicht.
+    # Die Seite lädt nur eigene Bilder, Stylesheets und Schriften, Skripte gibt es nicht.
     content_security_policy {
-      content_security_policy = "default-src 'none'; img-src 'self'; style-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+      content_security_policy = "default-src 'none'; font-src 'self'; img-src 'self'; style-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
       override                = true
     }
   }
