@@ -11,6 +11,8 @@ site/        Inhalt der Webseite
 terraform/   Infrastruktur als Code
 ```
 
+Die Webseite in `site/` besteht aus statischem HTML und CSS, ohne JavaScript und ohne Build-Schritt. Sie zeigt ein frei erfundenes Unternehmen, die LoyLife Textildruck GmbH.
+
 ## Voraussetzungen
 
 - Terraform ab Version 1.11
@@ -112,4 +114,4 @@ Der Bucket ist versioniert und wird von Terraform nicht gelöscht, solange er Da
 
 ## Lizenz
 
-MIT, siehe [LICENSE](LICENSE).
+MIT, siehe [LICENSE](LICENSE). Die Schrift Sofia Sans in `site/assets/fonts/` steht unter der SIL Open Font License 1.1, siehe [OFL.txt](site/assets/fonts/OFL.txt).
